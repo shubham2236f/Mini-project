@@ -1,0 +1,26 @@
+
+.example{
+    animation: example1 ease-in 2s;
+}
+ @keyframes example1 {
+    from{width: 0px;}
+    to{width:170px;}
+      }
+
+      @keyframes movement{
+        from{left:-25%;}
+        to{left: 100%;}
+      }
+ .movecycle{
+  animation: movement linear 50s infinite;
+ }
+ .movecar{
+  animation: movement linear 25s infinite;
+ }
+
+ .arima-font {
+  font-family: "Arima", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 100;
+  font-style: normal;
+}

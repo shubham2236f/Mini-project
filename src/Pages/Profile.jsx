@@ -48,7 +48,7 @@ const check = useCallback(async()=>{
     useEffect(()=>{
         check()
         getdata()
-    },[])
+    },[userdata])
 
     const handleclick = ()=>{
         navigate("/Requests")

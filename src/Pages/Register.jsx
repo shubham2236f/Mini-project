@@ -87,9 +87,11 @@ function Register() {
   const getUser = useCallback(async () => {
     try {
       const userData = await authservice.getCurrentUser();
+      setUserId(userData.$id);
+      console.log(userData);
+      
       const data = await service.getPosts([Query.equal('userId', userData.$id)]);
       if (data.documents.length > 0) {
-        setUserId(userData.$id);
         const fetchData = data.documents[0];
         setOldRegister(fetchData);
         setRegisterStatus(true);
@@ -98,6 +100,11 @@ function Register() {
       console.log("ERROR: in fetching data in register page", error);
     }
   }, []);
+
+
+  useEffect(() => {
+    console.log("User ID:", userId); // Debug log to confirm userId is set
+  }, [userId]);
 
   useEffect(() => {
     getUser();

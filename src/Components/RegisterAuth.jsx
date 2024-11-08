@@ -15,9 +15,9 @@ function RegisterAuth() {
        const currentUserId = response.$id;
 
         const auth = await service.getPosts([Query.search('userId', currentUserId)])
+        console.log(auth);
         
       if(auth){
-              console.log(auth);
               navigate("/Profile")
           }
       else{

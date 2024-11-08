@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useCallback, useEffect,useState } from 'react'
 import service from '@/appwrite/config'
 import authservice from '@/appwrite/auth'
 import { Query } from 'appwrite'
@@ -16,20 +16,44 @@ function Profile() {
         const data = await service.getPosts([Query.equal('userId', response.$id)])
         if(data){
             setuserdata(data.documents[0])
+            console.log(data.documents[0]);
+            
         }
     }
     catch(error){
         console.log(error);    
     }
     }
+const check = useCallback(async()=>{
+    try{
+        const response =  await authservice.getCurrentUser()
+       const currentUserId = response.$id;
+
+        const auth = await service.getPosts([Query.search('userId', currentUserId)])
+        console.log(auth);
+        
+      if(auth.total===0){
+              navigate("/register")
+          }
+      else{
+              navigate("/Profile")
+      }
+    }
+    catch(error){
+        console.log(error);
+        
+    }    
+})
+
     useEffect(()=>{
+        check()
         getdata()
     },[])
 
     const handleclick = ()=>{
         navigate("/Requests")
     }
-    const imageUrl = userdata.profileimgId ? service.getFilePreview(userdata.profileimgId) : null;
+    //const imageUrl = userdata.profileimgId ? service.getFilePreview(userdata.profileimgId) : null;
     if(!userdata){
         return <Loader/>
     }
@@ -42,9 +66,9 @@ function Profile() {
             <div className="col-span-4 sm:col-span-3">
                 <div className="bg-white shadow rounded-lg p-6">
                     <div className="flex flex-col items-center">
-                        <img src={imageUrl} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
+                    <img src={service.getFilePreview(userdata.profileimgId)} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
 
-                        </img>
+</img>
                         <h1 className="text-xl font-bold">{userdata?.Name}</h1>
                         <p className="text-gray-700">{userdata.Occupation}</p>
                         <div className="mt-6 flex flex-wrap gap-4 justify-center">

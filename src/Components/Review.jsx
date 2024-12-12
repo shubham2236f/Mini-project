@@ -4,15 +4,6 @@ import { Query } from 'appwrite';
 import { useCallback } from 'react';
 import React, { useState, useEffect } from 'react';
 
-// Simulated API call
-const getReviews = async () => {
-  return [
-    { id: 1, userName: "Alice Johnson", Rating: 5, date: "2023-06-01", comment: "Excellent service! Highly recommended." },
-    { id: 2, userName: "Bob Smith", Rating: 4, date: "2023-05-28", comment: "Great experience overall. Would use again." },
-    { id: 3, userName: "Carol White", Rating: 3, date: "2023-05-25", comment: "Decent service, but room for improvement." },
-  ];
-};
-
 const StarRating = ({ Rating, setRating = null }) => {
   return (
     <div className="flex gap-1">

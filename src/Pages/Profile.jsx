@@ -9,46 +9,43 @@ import { useNavigate } from 'react-router-dom'
 function Profile() {
     const navigate = useNavigate();
     const [userdata , setuserdata]  = useState("");
+    const [isMounted, setIsMounted] = useState(true); 
 
-    const getdata= async()=>{
-        try{
-        const response = await authservice.getCurrentUser()
-        const data = await service.getPosts([Query.equal('userId', response.$id)])
-        if(data){
-            setuserdata(data.documents[0])
-            console.log(data.documents[0]);
-            
-        }
-    }
-    catch(error){
-        console.log(error);    
-    }
-    }
-const check = useCallback(async()=>{
-    try{
-        const response =  await authservice.getCurrentUser()
-       const currentUserId = response.$id;
-
-        const auth = await service.getPosts([Query.search('userId', currentUserId)])
-        console.log(auth);
-        
-      if(auth.total===0){
-              navigate("/register")
+    const fetchUserData = async (userId) => {
+        try {
+          const data = await service.getPosts([Query.equal('userId', userId)]);
+          if (data.total > 0) {
+            setuserdata(data.documents[0]);
           }
-      else{
-              navigate("/Profile")
-      }
-    }
-    catch(error){
-        console.log(error);
-        
-    }    
-})
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      const checkUserRegistration = async () => {
+        try {
+          const response = await authservice.getCurrentUser();
+          const currentUserId = response.$id;
+          const auth = await service.getPosts([Query.search('userId', currentUserId)]);
+    
+          if (isMounted) {
+            if (auth.total === 0) {
+              navigate("/register");
+            } else {
+              fetchUserData(currentUserId);
+            }
+          }
+        } catch (error) {
+          console.log(error);
+          setError("Failed to verify user registration.");
+        }
+      };
+      
 
     useEffect(()=>{
-        check()
-        getdata()
-    },[userdata])
+        checkUserRegistration();
+
+        return () => setIsMounted(false);
+    },[])
 
     const handleclick = ()=>{
         navigate("/Requests")

@@ -42,15 +42,15 @@ const router = createBrowserRouter([
         element:<VendorProfile/>
       },
       {
+        path: "/profile",
+        element: <Profile/>,
+      },
+      {
         path:"/RequestForm/:userId",
         element:<RequestForm/>
       }
        
     ],
-},
-{
-  path: "/profile",
-  element: <Profile/>,
 },
 {
   path: "/Requests",
